@@ -49,6 +49,25 @@ def complete_days_after_PDI_in(model, qty, sheet_pdiDays):
 
 # Streamlit app
 st.title('PDI-Out Forecast')
+st.write('Get input tempates below')
+
+
+# templates
+template1_file_path = "input_template/TTL_PLAN_input.xlsx"
+st.download_button(
+    label="Download TTL_PLAN template",
+    data=open(template1_file_path, "rb").read(),
+    file_name="TTL_PLAN_input.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
+
+template2_file_path = "input_template/PDI_DAYS2.xlsx"
+st.download_button(
+    label="Download PDI_DAYS2 template",
+    data=open(template2_file_path, "rb").read(),
+    file_name="PDI_DAYS2.xlsx",
+    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+)
 
 # Upload TTL_PLAN_input.xlsx
 ttl_plan_file = st.file_uploader("Upload TTL_PLAN_input.xlsx", type="xlsx")
