@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 from io import BytesIO
-from matplotlib import pyplot
+import plotly.graph_objects as go
 
 
 # Function to calculate workday excluding Sundays and holidays
@@ -51,7 +51,7 @@ def complete_days_after_PDI_in(model, qty, sheet_pdiDays):
 st.title('PDI-Out Forecast')
 st.write("Receive two excel files")
 st.write("1. Historical leadtime by model")
-st.write("2. Check-in plan by model + additional holydays (Standard holyday is every sunday)")
+st.write("2. Check-in plan by model + additional holydays (Standard holyday is every Sunday)")
 st.write('Get input tempates below')
 
 # templates
@@ -154,9 +154,11 @@ if ttl_plan_file and pdi_days_file:
     )
 
     # Draw graph
+
+    fig = go.Figure()
+
     ttl_pdi_out = df.T.sum()
     x = df.index
-    fig = pyplot.figure(figsize=(8,5))
     val_out = list(df.T.sum().values)
     val_out = [i.item() for i in val_out]
     val_in = list(sheet_schedule.sum().values)
@@ -173,11 +175,26 @@ if ttl_plan_file and pdi_days_file:
         block += a - b
         val_block.append(block)
 
-    pyplot.plot(x, val_in, label="PDI_In")
-    pyplot.plot(x, val_out, label="PDI_Out")
-    pyplot.plot(x, val_block, label="In PDI")
-    pyplot.legend()
-    pyplot.ylabel('qty')
-    fig.autofmt_xdate()
-    st.pyplot(fig)
+    fig.add_trace(go.Scatter(
+    x = x,
+    y = val_in,
+    name = "PDI-<b>In</b>",
+    connectgaps=True
+    ))
+
+    fig.add_trace(go.Scatter(
+    x = x,
+    y = val_out,
+    name = "PDI-<b>Out</b>",
+    connectgaps=True
+    ))
+
+    fig.add_trace(go.Scatter(
+    x = x,
+    y = val_block,
+    name = "In-Prosessing",
+    connectgaps=True
+    ))
+
+    st.plotly_chart(fig, theme="streamlit")
 
