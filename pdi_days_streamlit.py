@@ -49,8 +49,10 @@ def complete_days_after_PDI_in(model, qty, sheet_pdiDays):
 
 # Streamlit app
 st.title('PDI-Out Forecast')
+st.write("Receive two excel files")
+st.write("1. Historical leadtime by model")
+st.write("2. Check-in plan by model + additional holydays (Standard holyday is every sunday)")
 st.write('Get input tempates below')
-
 
 # templates
 template1_file_path = "input_template/TTL_PLAN_input.xlsx"
@@ -68,6 +70,9 @@ st.download_button(
     file_name="PDI_DAYS2.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
+
+st.write("By uploading thosem it will return check-out(complition) forecast")
+st.write("* This simulation does not concider factory capacity")
 
 # Upload TTL_PLAN_input.xlsx
 ttl_plan_file = st.file_uploader("Upload TTL_PLAN_input.xlsx", type="xlsx")
